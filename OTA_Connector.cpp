@@ -101,7 +101,6 @@ void Connector::create(){
 
 void Connector::beginOTA()
 {
-  _client.connectSSL(_server, 443);
   _flag = true;
 }
 
