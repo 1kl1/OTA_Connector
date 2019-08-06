@@ -1,0 +1,5 @@
+Connector   KEYWORD1
+beginOTA    KEYWORD2
+create  KEYWORD2
+pollOTA KEYWORD2
+connectWifi KEYWORD2
