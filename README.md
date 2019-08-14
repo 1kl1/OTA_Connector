@@ -7,8 +7,8 @@ It only supports Arduino SAMD Boards (32-bits ARM Cortex-M0+)
 ------------------------
 
 ## Installation
-1. [Download](https://github.com/1kl1/OTA_Connector/archive/master.zip) the latest release from [github](https://github.com/1kl1/OTA_Connector)
-2. [Download](https://github.com/JChristensen/Timer/archive/master.zip) the latest release from [github](https://github.com/JChristensen/Timer)
+1. [Download](https://github.com/1kl1/OTA_Connector/archive/master.zip) OTA_Connector's the latest release from [github](https://github.com/1kl1/OTA_Connector)
+2. [Download](https://github.com/JChristensen/Timer/archive/master.zip) Timer's the latest release from [github](https://github.com/JChristensen/Timer)
 2. Unzip and rename the folder to "OTA_Connector", "Timer" (remove the -master)
 3. Paste the modified folders on your Library folder (.../Arduino/libraries)
 4. Reopen the Arduino IDE
@@ -52,7 +52,7 @@ I recommend to note your DEVICE_PASSWORD. Because it needs when you upload your 
 Connector connector("<WIFI_SSID>","<WIFI_PW>","<UPLOAD_GROUP>","<VERSION>","<DEVICE_ID>","<DEVICE_PASSWORD>",InternalStorage);
 ```
 
-If you are the first time upload code with our library, you have to create device at our [homepage](https://oongyi.com/arduino/OTA) or use underlying function
+If you are the first time upload code with our library, you have to create device at our [homepage](https://oongyi.com/arduino/OTA) or use underlying function at initialize.
 ```cpp
     // this function will register your device to our web page.
   connector.create();
