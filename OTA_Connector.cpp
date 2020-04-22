@@ -56,7 +56,7 @@ Connector::Connector(const char* ssid, const char* pass, const char* group, cons
   _name = name;
   _expectedAuthorization = "Basic " + base64Encode(String(name) + ":" + String(password));
   _storage = &storage; 
-  _server = "oongyi.com";
+  _server = "oongyi.xyz";
 }
 
 String Connector::connectWifi(){
@@ -78,26 +78,26 @@ String Connector::connectWifi(){
   return "WiFi Connected With "+_ipString;
 }
 
-void Connector::create(){
-  WiFiSSLClient client;
-  String PostData = "{\"board\": \""+String(BOARD)+"\", \"deviceID\": \""+_name+"\",\"ip\": \""+_ipString+"\",\"group\": \""+_group+"\",\"version\": \""+_version+"\"}";
+// void Connector::create(){
+//   WiFiSSLClient client;
+//   String PostData = "{\"board\": \""+String(BOARD)+"\", \"deviceID\": \""+_name+"\",\"ip\": \""+_ipString+"\",\"group\": \""+_group+"\",\"version\": \""+_version+"\"}";
   
 
-  if (client.connectSSL(_server, 443)) {
-    client.println("POST /arduino/OTA/ HTTP/1.1");
-    client.println("Host: www.oongyi.com");
-    client.println("Content-Type: application/json");
-    client.print("Content-Length: ");
-    client.println(PostData.length());
-    client.println("Connection: close");
-    client.println();
-    client.println(PostData);
-  }
-  while (client.available()) {
-    char c = client.read();
-  }
-  client.stop();
-}
+//   if (client.connectSSL(_server, 443)) {
+//     client.println("POST /arduino/OTA/ HTTP/1.1");
+//     client.println("Host: www.oongyi.xyz");
+//     client.println("Content-Type: application/json");
+//     client.print("Content-Length: ");
+//     client.println(PostData.length());
+//     client.println("Connection: close");
+//     client.println();
+//     client.println(PostData);
+//   }
+//   while (client.available()) {
+//     char c = client.read();
+//   }
+//   client.stop();
+// }
 
 void Connector::beginOTA()
 {
@@ -115,7 +115,7 @@ void Connector::pollServer()
     String PostData = "{\"deviceID\": \""+_name+"\",\"group\": \""+_group+"\"}";
     _client.connectSSL(_server, 443);
     _client.println("POST /arduino/OTA/node HTTP/1.1");
-    _client.println("Host: oongyi.com");
+    _client.println("Host: www.oongyi.xyz");
     _client.println("Content-Type: application/json");
     _client.println("Connection: close");
     _client.print("Content-Length: ");
@@ -198,7 +198,6 @@ void Connector::pollServer()
     while (_client.connected() && read < contentLength) {
       if (_client.available()) {
         read++;
-
         _storage->write((char)_client.read());
       }
     }
@@ -222,98 +221,3 @@ void Connector::pollServer()
     }
   }
 }
-  
-  
-
-  // if (client) {
-    
-  //   String request = client.readStringUntil('\n');
-  //   request.trim();
-
-  //   String header;
-  //   long contentLength = -1;
-  //   String authorization;
-
-  //   do {
-  //     header = client.readStringUntil('\n');
-  //     header.trim();
-
-  //     if (header.startsWith("Content-Length: ")) {
-  //       header.remove(0, 16);
-
-  //       contentLength = header.toInt();
-  //     } else if (header.startsWith("Authorization: ")) {
-  //       header.remove(0, 15);
-
-  //       authorization = header;
-  //     }
-  //   } while (header != "");
-  //   Serial.println(authorization);
-  //   Serial.println(contentLength);
-
-  //   if (request == "GET / HTTP/1.1"){
-  //     flushRequestBody(client, contentLength);
-  //     sendHttpResponse(client, 200, "OK");
-  //     return;
-  //   }
-
-  //   if (request != "POST /sketch HTTP/1.1") {
-  //     flushRequestBody(client, contentLength);
-  //     sendHttpResponse(client, 404, "Not Found");
-  //     return;
-  //   }
-
-  //   if (_expectedAuthorization != authorization) {
-  //     flushRequestBody(client, contentLength);
-  //     sendHttpResponse(client, 401, "Unauthorized");
-  //     return;
-  //   }
-
-  //   if (contentLength <= 0) {
-  //     sendHttpResponse(client, 400, "Bad Request");
-  //     return;
-  //   }
-
-  //   if (_storage == NULL || !_storage->open()) {
-  //     flushRequestBody(client, contentLength);
-  //     sendHttpResponse(client, 500, "Internal Server Error");
-  //     return;
-  //   }
-
-  //   if (contentLength > _storage->maxSize()) {
-  //     _storage->close();
-  //     flushRequestBody(client, contentLength);
-  //     sendHttpResponse(client, 413, "Payload Too Large");
-  //     return;
-  //   }
-
-  //   long read = 0;
-  //   Serial.println("Writing Start");
-
-  //   while (client.connected() && read < contentLength) {
-  //     if (client.available()) {
-  //       read++;
-
-  //       _storage->write((char)client.read());
-  //     }
-  //   }
-
-  //   _storage->close();
-
-  //   if (read == contentLength) {
-  //     sendHttpResponse(client, 200, "OK");
-      
-  //     delay(250);
-
-  //     // apply the update
-  //     _storage->apply();
-      
-  //     while (true);
-  //   } else {
-  //     _storage->clear();
-
-  //     client.stop();
-  //   }
-  // }
-// }
-
