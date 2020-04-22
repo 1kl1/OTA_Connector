@@ -114,7 +114,7 @@ void Connector::pollServer()
   if(_flag){
     String PostData = "{\"deviceID\": \""+_name+"\",\"group\": \""+_group+"\"}";
     _client.connectSSL(_server, 443);
-    _client.println("POST /arduino/OTA/node HTTP/1.1");
+    _client.println("POST /arduinoOTA/node HTTP/1.1");
     _client.println("Host: www.oongyi.xyz");
     _client.println("Content-Type: application/json");
     _client.println("Connection: close");
