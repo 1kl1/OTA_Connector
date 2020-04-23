@@ -19,30 +19,20 @@ It only supports Arduino SAMD Boards (32-bits ARM Cortex-M0+)
 Let's see the basic usage
 
 ```cpp
-#include <OTA_Connector.h>
+#include "OTA_Connector.h"
 
 Connector connector("<WIFI_SSID>","<WIFI_PW>","<UPLOAD_GROUP>","<VERSION>","<DEVICE_ID>","<DEVICE_PASSWORD>",InternalStorage);
 
-unsigned long previousMillis = 0; 
-const long interval = 3000;
-
 void setup() {
   Serial.begin(9600);
-  Serial.println(connector.connectWifi());
+  connector.connectWifi();
   connector.beginOTA();
 }
 
 void loop() {
-  pollOTA();
+  connector.pollOTA();
 }
 
-void pollOTA(){
-  unsigned long currentMillis = millis();
-  if(currentMillis - previousMillis >= interval){
-    previousMillis = currentMillis;
-    connector.pollOTA();
-  }
-}
 ```
 Connector Object needs your wifi info.
 If you want multiple upload, you have to set same UPLOAD_GROUP to each devices.
