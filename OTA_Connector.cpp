@@ -139,15 +139,14 @@ void Connector::pollServer()
   if(_client.connect(_server, 443)){
     String PostData = "{\"deviceID\": \""+_name+"\",\"group\": \""+_group+"\"}";
     Serial.println("connected to server");
-    _client.println("GET / HTTP/1.1");
+    _client.println("POST /arduinoOTA/node HTTP/1.1");
     _client.println("Host: www.oongyi.xyz");
     _client.println("Content-Type: application/json");
     _client.println("Connection: close");
-    //_client.print("Content-Length: ");
-    //_client.println(PostData.length());
-    //_client.println();
-    //_client.println(PostData);
+    _client.print("Content-Length: ");
+    _client.println(PostData.length());
     _client.println();
+    _client.println(PostData);
     _flag = false;
     return;
   }
