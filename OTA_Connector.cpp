@@ -56,17 +56,19 @@ Connector::Connector(const char* ssid, const char* pass, const char* group, cons
   _name = name;
   _expectedAuthorization = "Basic " + base64Encode(String(name) + ":" + String(password));
   _storage = &storage; 
-  _server = "oongyi.xyz";
+  _server = "www.oongyi.xyz";
 }
 
-String Connector::connectWifi(){
+void Connector::connectWifi(){
   int status = WL_IDLE_STATUS;
   if (WiFi.status() == WL_NO_SHIELD) {
-    return "WiFi shield not present";
   }
+
   while (status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to SSID: ");
+    Serial.println(_ssid);
     status = WiFi.begin(_ssid, _pass);
-    delay(1000);
+    delay(5000);
   }
 
   IPAddress ip = WiFi.localIP();
@@ -75,7 +77,25 @@ String Connector::connectWifi(){
   for (byte octet = 1; octet < 4; ++octet) {
     _ipString += '.' + String(ip[octet]);
   }
-  return "WiFi Connected With "+_ipString;
+
+  printWiFiStatus();
+}
+
+void Connector::printWiFiStatus(){
+    // print the SSID of the network you're attached to:
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+
+  // print your WiFi shield's IP address:
+  IPAddress ip = WiFi.localIP();
+  Serial.print("IP Address: ");
+  Serial.println(ip);
+
+  // print the received signal strength:
+  long rssi = WiFi.RSSI();
+  Serial.print("signal strength (RSSI):");
+  Serial.print(rssi);
+  Serial.println(" dBm");
 }
 
 // void Connector::create(){
@@ -106,25 +126,35 @@ void Connector::beginOTA()
 
 void Connector::pollOTA()
 {
-  pollServer();
+  if(_flag){
+    pollServer();  
+  }
+  else{
+    checkClient();
+  }
 }
 
 void Connector::pollServer()
 {
-  if(_flag){
+  if(_client.connect(_server, 443)){
     String PostData = "{\"deviceID\": \""+_name+"\",\"group\": \""+_group+"\"}";
-    _client.connectSSL(_server, 443);
-    _client.println("POST /arduinoOTA/node HTTP/1.1");
+    Serial.println("connected to server");
+    _client.println("GET / HTTP/1.1");
     _client.println("Host: www.oongyi.xyz");
     _client.println("Content-Type: application/json");
     _client.println("Connection: close");
-    _client.print("Content-Length: ");
-    _client.println(PostData.length());
+    //_client.print("Content-Length: ");
+    //_client.println(PostData.length());
+    //_client.println();
+    //_client.println(PostData);
     _client.println();
-    _client.println(PostData);
     _flag = false;
     return;
   }
+}
+
+void Connector::checkClient(){
+
   if (_client.available()) {
     String response = _client.readStringUntil('\n');
     response.trim();
@@ -220,4 +250,5 @@ void Connector::pollServer()
       _client.stop();
     }
   }
+
 }
