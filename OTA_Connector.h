@@ -1,13 +1,3 @@
-/*
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  OTA_Connector.h - Library for flashing Arduino Over The Air.
-  Written with Wifi1010OTA library.
-*/
-
 #ifndef OTA_connector_h
 #define OTA_connector_h
 
@@ -43,8 +33,5 @@ class Connector
     void pollServer();
 };
 
-
-
-// the #include statment and code go here...
 
 #endif
